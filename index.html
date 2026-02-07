@@ -430,6 +430,34 @@
     }
 
     async function loadStandaloneNews() {
+      const fetchOne = async (src) => {
+        const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(src.url)}`;
+        const res = await fetch(proxy, { cache: 'no-store' });
+        if (!res.ok) return [];
+        const xml = await res.text();
+        return parseFeedXml(xml, src);
+      };
+      const results = await Promise.allSettled(STANDALONE_SOURCES.map(fetchOne));
+      const merged = [];
+      results.forEach((r) => {
+        if (r.status === 'fulfilled' && Array.isArray(r.value)) merged.push(...r.value);
+      });
+      const dedup = new Map();
+      merged.forEach((item) => {
+        const key = item.link || item.title;
+        if (!key || dedup.has(key)) return;
+        dedup.set(key, item);
+      });
+      const items = Array.from(dedup.values())
+        .sort((a, b) => new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0))
+        .slice(0, 60);
+      if (items.length >= 8) {
+        return {
+          updatedAt: new Date().toISOString(),
+          sources: STANDALONE_SOURCES.map((s) => s.name),
+          items,
+        };
+      }
       return {
         updatedAt: new Date().toISOString(),
         sources: [...STANDALONE_SOURCES.map((s) => s.name), "Snapshot local"],
@@ -438,14 +466,34 @@
     }
 
     async function loadStandaloneStock() {
-      return {
-        symbol: 'TTE.PA',
-        price: '60.14',
-        changePercent: '-1.65',
-        currency: 'EUR',
-        fallback: true,
-        lastUpdate: new Date().toISOString(),
-      };
+      try {
+        const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/TTE.PA?interval=1d&range=5d')}`;
+        const res = await fetch(proxy, { cache: 'no-store' });
+        if (!res.ok) throw new Error('Stock proxy error');
+        const data = await res.json();
+        const result = data.chart?.result?.[0];
+        const meta = result?.meta || {};
+        const currentPrice = Number(meta.regularMarketPrice || 0);
+        const previousClose = Number(meta.previousClose || meta.chartPreviousClose || 0);
+        const change = currentPrice - previousClose;
+        const changePercent = previousClose ? (change / previousClose) * 100 : 0;
+        return {
+          symbol: 'TTE.PA',
+          price: currentPrice.toFixed(2),
+          changePercent: changePercent.toFixed(2),
+          currency: meta.currency || 'EUR',
+          lastUpdate: new Date().toISOString(),
+        };
+      } catch {
+        return {
+          symbol: 'TTE.PA',
+          price: '60.14',
+          changePercent: '-1.65',
+          currency: 'EUR',
+          fallback: true,
+          lastUpdate: new Date().toISOString(),
+        };
+      }
     }
 
     function updateStockWidget() {
