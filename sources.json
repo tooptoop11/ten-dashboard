@@ -1,0 +1,94 @@
+{
+  "sources": [
+    {
+      "name": "Reuters Business",
+      "url": "https://feeds.reuters.com/reuters/businessNews",
+      "country": "🌍"
+    },
+    {
+      "name": "BBC News Business",
+      "url": "http://feeds.bbci.co.uk/news/business/rss.xml",
+      "country": "🇬🇧"
+    },
+    {
+      "name": "The Guardian Business",
+      "url": "https://www.theguardian.com/uk/business/rss",
+      "country": "🇬🇧"
+    },
+    {
+      "name": "Al Jazeera",
+      "url": "https://www.aljazeera.com/xml/rss/all.xml",
+      "country": "🌍"
+    },
+    {
+      "name": "Yahoo Finance",
+      "url": "https://finance.yahoo.com/news/rssindex",
+      "country": "🇺🇸"
+    },
+    {
+      "name": "CNBC Top News",
+      "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html",
+      "country": "🇺🇸"
+    },
+    {
+      "name": "MarketWatch",
+      "url": "http://feeds.marketwatch.com/marketwatch/topstories/",
+      "country": "🇺🇸"
+    },
+    {
+      "name": "Investing.com",
+      "url": "https://www.investing.com/rss/news.rss",
+      "country": "🌍"
+    },
+    {
+      "name": "OilPrice.com",
+      "url": "https://oilprice.com/rss/main",
+      "country": "🛢️"
+    },
+    {
+      "name": "Energy Voice",
+      "url": "https://www.energyvoice.com/feed/",
+      "country": "🛢️"
+    },
+    {
+      "name": "World Oil",
+      "url": "https://www.worldoil.com/feed",
+      "country": "🛢️"
+    },
+    {
+      "name": "Offshore Energy",
+      "url": "https://www.offshore-energy.biz/feed/",
+      "country": "🛢️"
+    },
+    {
+      "name": "Rigzone",
+      "url": "http://www.rigzone.com/rss/news.aspx",
+      "country": "🛢️"
+    },
+    {
+      "name": "Google News - TotalEnergies",
+      "url": "https://news.google.com/rss/search?q=TotalEnergies&hl=en&gl=US&ceid=US:en",
+      "country": "🔍"
+    },
+    {
+      "name": "Google News - Energy",
+      "url": "https://news.google.com/rss/search?q=energy+oil+gas&hl=en&gl=US&ceid=US:en",
+      "country": "🔍"
+    },
+    {
+      "name": "Google News - LNG",
+      "url": "https://news.google.com/rss/search?q=LNG+liquefied+natural+gas&hl=en&gl=US&ceid=US:en",
+      "country": "🔍"
+    },
+    {
+      "name": "Google News - Renewable",
+      "url": "https://news.google.com/rss/search?q=renewable+energy+solar+wind&hl=en&gl=US&ceid=US:en",
+      "country": "🔍"
+    },
+    {
+      "name": "Euronews",
+      "url": "https://www.euronews.com/rss?level=theme&name=news",
+      "country": "🇪🇺"
+    }
+  ]
+}

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TEN Dashboard - 32 Cards</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .card { transition: all 0.2s; }
+    .card:hover { transform: translateY(-2px); border-color: #dc2626; }
+    .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+    .scrollbar-thin::-webkit-scrollbar-track { background: #1e293b; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+  </style>
+</head>
+<body class="bg-slate-950 text-white">
+  
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-red-700 to-red-600 shadow-xl sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <div class="text-3xl font-black">TEN<span class="text-red-300">:</span></div>
+          <div class="text-sm text-red-100/80">The Essential Newsroom</div>
+          <div id="mode-badge" class="text-[10px] px-2 py-1 rounded bg-black/20 text-red-100/80 border border-white/20 hidden"></div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
+          <div class="text-xs text-red-100/70" id="stock-symbol">TTE.PA</div>
+          <div class="text-xl font-bold" id="stock-price-line">-- <span class="text-sm text-red-300">--</span></div>
+          <div class="text-[10px] text-red-100/70 mt-1" id="stock-update">Mise a jour: --</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="bg-slate-900 border-b border-slate-800 sticky top-[72px] z-30">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex gap-1 overflow-x-auto">
+        <button onclick="showSection('mentions', event)" class="nav-btn px-4 py-3 text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800">
+          01 MENTIONS (2)
+        </button>
+        <button onclick="showSection('brief', event)" class="nav-btn px-4 py-3 text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800">
+          02 BRIEF (4)
+        </button>
+        <button onclick="showSection('une', event)" class="nav-btn px-4 py-3 text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800">
+          03 À LA UNE (1)
+        </button>
+        <button onclick="showSection('signals', event)" class="nav-btn px-4 py-3 text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800">
+          04 SIGNALS (2)
+        </button>
+        <button onclick="showSection('intelligence', event)" class="nav-btn px-4 py-3 text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800">
+          05 INTELLIGENCE (13)
+        </button>
+        <button onclick="showSection('outils', event)" class="nav-btn px-4 py-3 text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800">
+          06 OUTILS (7)
+        </button>
+        <button onclick="showSection('atp', event)" class="nav-btn px-4 py-3 text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800">
+          07 OUTILS ATP (3)
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-6 py-8">
+
+    <!-- 01 MENTIONS -->
+    <div id="section-mentions" class="section">
+      <h2 class="text-2xl font-bold mb-6">01 MENTIONS</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">📡</div>
+          <h3 class="text-lg font-bold mb-2">Live Stream</h3>
+          <p class="text-slate-400 text-sm mb-3">Flux temps réel des mentions TotalEnergies</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Dashboard live</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">🔥</div>
+          <h3 class="text-lg font-bold mb-2">5 Sujets Chauds</h3>
+          <p class="text-slate-400 text-sm mb-3">Les 5 sujets prioritaires du jour avec contexte</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Liste priorisée</span>
+        </div>
+      </div>
+      <div id="live-stream-container" class="mt-6"></div>
+    </div>
+
+    <!-- 02 BRIEF -->
+    <div id="section-brief" class="section hidden">
+      <h2 class="text-2xl font-bold mb-6">02 BRIEF</h2>
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">💬</div>
+          <h3 class="text-lg font-bold mb-2">Brief WhatsApp CEO/ComEx</h3>
+          <p class="text-slate-400 text-sm mb-3">Synthèse quali avec citations éditorialistes, emojis, format mobile</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Message WhatsApp ready</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">🌍</div>
+          <h3 class="text-lg font-bold mb-2">3 Lectures Géopolitiques</h3>
+          <p class="text-slate-400 text-sm mb-3">Décryptage des enjeux géopolitiques impactant TTE</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">3 analyses contextuelles</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">📈</div>
+          <h3 class="text-lg font-bold mb-2">3 Signaux Macro</h3>
+          <p class="text-slate-400 text-sm mb-3">Tendances économiques et sectorielles à surveiller</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">3 signaux commentés</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">📰</div>
+          <h3 class="text-lg font-bold mb-2">Opinion du Jour</h3>
+          <p class="text-slate-400 text-sm mb-3">L'éditorial ou tribune la plus significative</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">1 opinion analysée</span>
+        </div>
+      </div>
+      <div id="hot-topics-container" class="mt-6"></div>
+    </div>
+
+    <!-- 03 À LA UNE -->
+    <div id="section-une" class="section hidden">
+      <h2 class="text-2xl font-bold mb-6">03 À LA UNE</h2>
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">📸</div>
+          <h3 class="text-lg font-bold mb-2">Top Couvertures</h3>
+          <p class="text-slate-400 text-sm mb-3">Les 4 Unes les plus impactantes du jour</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">4 visuels + analyse</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 SIGNALS -->
+    <div id="section-signals" class="section hidden">
+      <h2 class="text-2xl font-bold mb-6">04 SIGNALS</h2>
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">📡</div>
+          <h3 class="text-lg font-bold mb-2">8 Weak Signals</h3>
+          <p class="text-slate-400 text-sm mb-3">Signaux faibles à surveiller (médias, ONG, politique)</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">8 alertes qualifiées</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">⚖️</div>
+          <h3 class="text-lg font-bold mb-2">Benchmark Marchés</h3>
+          <p class="text-slate-400 text-sm mb-3">Positionnement médiatique vs concurrents (Shell, BP, Equinor)</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Tableau comparatif</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 INTELLIGENCE -->
+    <div id="section-intelligence" class="section hidden">
+      <h2 class="text-2xl font-bold mb-6">05 INTELLIGENCE</h2>
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">🔮</div>
+          <h3 class="text-lg font-bold mb-2">Prédiction 48h</h3>
+          <p class="text-slate-400 text-sm mb-3">Anticipation des sujets émergents à 48h</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">3 scénarios probabilisés</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">🚨</div>
+          <h3 class="text-lg font-bold mb-2">Alerte Crise</h3>
+          <p class="text-slate-400 text-sm mb-3">Détection automatique des signaux de crise</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Alerte push + brief</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">💬</div>
+          <h3 class="text-lg font-bold mb-2">Q&A TotalEnergies</h3>
+          <p class="text-slate-400 text-sm mb-3">Base de questions-réponses actualisée par sujet</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Fiches Q&A</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">⚖️</div>
+          <h3 class="text-lg font-bold mb-2">Matrice Risque/Opportunité</h3>
+          <p class="text-slate-400 text-sm mb-3">Cartographie des risques et opportunités par sujet</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Matrice visuelle</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">📱</div>
+          <h3 class="text-lg font-bold mb-2">Écho Social</h3>
+          <p class="text-slate-400 text-sm mb-3">Analyse des conversations social media sur TTE</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Dashboard social</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">🎯</div>
+          <h3 class="text-lg font-bold mb-2">Décryptage Narratif Adverse ONG</h3>
+          <p class="text-slate-400 text-sm mb-3">Analyse campagnes ONG : éléments langage, contre-arguments, calendrier</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Rapport mensuel</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">📄</div>
+          <h3 class="text-lg font-bold mb-2">Brief Exécutif One-Pager</h3>
+          <p class="text-slate-400 text-sm mb-3">Synthèse ultra-condensée 1 page A4 pour prépa média dirigeant</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">PDF 1 page</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">🎓</div>
+          <h3 class="text-lg font-bold mb-2">État de l'Opinion Élite</h3>
+          <p class="text-slate-400 text-sm mb-3">Mesure de l'état d'esprit des prescripteurs (éditos, tribunes, think tanks)</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">PDF dicible/risque</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">⏰</div>
+          <h3 class="text-lg font-bold mb-2">Fenêtres de Parole & Silence</h3>
+          <p class="text-slate-400 text-sm mb-3">Identification des moments pour parler, se taire, laisser faire</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Recommandations timing</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">🏛️</div>
+          <h3 class="text-lg font-bold mb-2">Lecture Politique Anticipée</h3>
+          <p class="text-slate-400 text-sm mb-3">Anticipation du passage médiatique → politique → réglementaire</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Risque politisation</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">📊</div>
+          <h3 class="text-lg font-bold mb-2">Baromètre Crédibilité Corporate</h3>
+          <p class="text-slate-400 text-sm mb-3">Mesure de la crédibilité TTE par thème (transition, Afrique, innovation...)</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Tableau 🟢🟠🔴</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">💎</div>
+          <h3 class="text-lg font-bold mb-2">Narratifs Favorables Dormants</h3>
+          <p class="text-slate-400 text-sm mb-3">Identification des récits positifs non exploités, alliés silencieux</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Opportunités narratives</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">📉</div>
+          <h3 class="text-lg font-bold mb-2">Indice Saturation Médiatique</h3>
+          <p class="text-slate-400 text-sm mb-3">Mesure de la fatigue médiatique sur un sujet (éviter sur-réaction)</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Indicateur saturation</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 06 OUTILS -->
+    <div id="section-outils" class="section hidden">
+      <h2 class="text-2xl font-bold mb-6">06 OUTILS</h2>
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">📥</div>
+          <h3 class="text-lg font-bold mb-2">Export PDF Brief Complet</h3>
+          <p class="text-slate-400 text-sm mb-3">Export PDF formaté du brief quotidien complet</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">PDF branded TEN</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">🔍</div>
+          <h3 class="text-lg font-bold mb-2">Historique & Recherche</h3>
+          <p class="text-slate-400 text-sm mb-3">Accès à l'historique des briefs et recherche par sujet/date</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Interface recherche</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">🎙️</div>
+          <h3 class="text-lg font-bold mb-2">Energy News Briefing</h3>
+          <p class="text-slate-400 text-sm mb-3">Brief audio-ready pour diffusion interne (format podcast)</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Script audio 3min</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">📧</div>
+          <h3 class="text-lg font-bold mb-2">Mail Comex</h3>
+          <p class="text-slate-400 text-sm mb-3">Email formaté prêt à envoyer au Comex</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Email ready-to-send</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">🌐</div>
+          <h3 class="text-lg font-bold mb-2">Veille Géopolitique Dossier</h3>
+          <p class="text-slate-400 text-sm mb-3">Dossier thématique approfondi sur zone géographique</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">PDF 5-10 pages</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">💬</div>
+          <h3 class="text-lg font-bold mb-2">Partage WhatsApp</h3>
+          <p class="text-slate-400 text-sm mb-3">Message WhatsApp formaté avec emojis pour partage rapide</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Message WhatsApp</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">📊</div>
+          <h3 class="text-lg font-bold mb-2">Retombées CP</h3>
+          <p class="text-slate-400 text-sm mb-3">Analyse des retombées post-communiqué de presse</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Rapport retombées</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 07 OUTILS ATP -->
+    <div id="section-atp" class="section hidden">
+      <h2 class="text-2xl font-bold mb-6">07 OUTILS ATP</h2>
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">👤</div>
+          <h3 class="text-lg font-bold mb-2">Fiche Journaliste Préparatoire</h3>
+          <p class="text-slate-400 text-sm mb-3">Bio + articles récents + positionnement TTE + conseils pitch avant RDV</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">PDF 1-2 pages</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">📧</div>
+          <h3 class="text-lg font-bold mb-2">Email Récap + Note Intelligence</h3>
+          <p class="text-slate-400 text-sm mb-3">Email ready-to-send + note PDF après séquence médiatique</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">Email + PDF 2-3 pages</span>
+        </div>
+        <div class="card bg-slate-900 rounded-lg p-6 border border-slate-800 cursor-pointer">
+          <div class="text-4xl mb-3">📚</div>
+          <h3 class="text-lg font-bold mb-2">Dossier Thématique Sur Demande</h3>
+          <p class="text-slate-400 text-sm mb-3">Dossier complet sur un sujet (GNL, hydrogène...) : articles, journalistes, angles</p>
+          <span class="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">PDF 5-10 pages</span>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const REFRESH_MS = 15000;
+    const STANDALONE_MODE = window.location.protocol === 'file:';
+    const STANDALONE_FALLBACK_NEWS = [
+      { title: "TotalEnergies relance le projet Mozambique LNG", summary: "Reprise officielle du projet gazier avec perspectives de production 2029 et forte exposition médiatique internationale.", publishedAt: "2026-02-07T08:10:00Z", source: "Reuters", feedTitle: "Reuters Business", country: "🌍", link: "https://www.reuters.com/" },
+      { title: "Oiseaux mazoutés en Bretagne: retour du dossier Erika", summary: "Des associations environnementales relancent le débat sur les responsabilités historiques et la réparation des dommages.", publishedAt: "2026-02-07T07:25:00Z", source: "France Info", feedTitle: "Google News - TotalEnergies", country: "🔍", link: "https://news.google.com/" },
+      { title: "Marchés pétroliers: le Brent reste sous tension", summary: "Les tensions géopolitiques au Moyen-Orient alimentent la volatilité des prix de l'énergie.", publishedAt: "2026-02-07T06:40:00Z", source: "MarketWatch", feedTitle: "MarketWatch", country: "🇺🇸", link: "https://www.marketwatch.com/" },
+      { title: "NAO: débat sur les salaires dans les grands groupes énergétiques", summary: "Les syndicats appellent à renforcer le dialogue social après des négociations jugées insuffisantes.", publishedAt: "2026-02-07T06:00:00Z", source: "BBC", feedTitle: "BBC News Business", country: "🇬🇧", link: "https://www.bbc.com/news/business" },
+      { title: "Transition énergétique: accélération des contrats d'électricité renouvelable", summary: "Plusieurs industriels signent des accords long terme pour sécuriser leur approvisionnement bas carbone.", publishedAt: "2026-02-07T05:30:00Z", source: "The Guardian", feedTitle: "The Guardian Business", country: "🇬🇧", link: "https://www.theguardian.com/uk/business" },
+      { title: "LNG mondial: nouvelle vague d'investissements en Afrique", summary: "Le GNL reste un axe stratégique pour la sécurité énergétique de plusieurs régions.", publishedAt: "2026-02-07T04:50:00Z", source: "Al Jazeera", feedTitle: "Al Jazeera", country: "🌍", link: "https://www.aljazeera.com/" },
+      { title: "Les majors pétrolières sous pression des ONG climat", summary: "Des campagnes coordonnées ciblent les communications d'entreprise et les engagements de neutralité carbone.", publishedAt: "2026-02-07T04:05:00Z", source: "Euronews", feedTitle: "Euronews", country: "🇪🇺", link: "https://www.euronews.com/" },
+      { title: "Hydrogène et e-fuels: montée des partenariats industriels", summary: "Les projets pilotes se multiplient pour décarboner les usages lourds.", publishedAt: "2026-02-07T03:45:00Z", source: "Investing.com", feedTitle: "Investing.com", country: "🌍", link: "https://www.investing.com/" },
+      { title: "Offshore: capex en hausse sur plusieurs bassins", summary: "Les dépenses d'exploration-production repartent dans certaines zones clés.", publishedAt: "2026-02-07T03:10:00Z", source: "Offshore Energy", feedTitle: "Offshore Energy", country: "🛢️", link: "https://www.offshore-energy.biz/" },
+      { title: "Les importations LNG européennes restent soutenues", summary: "L'Europe continue de diversifier ses approvisionnements gaziers.", publishedAt: "2026-02-07T02:35:00Z", source: "Energy Voice", feedTitle: "Energy Voice", country: "🛢️", link: "https://www.energyvoice.com/" },
+      { title: "Shell et BP: stratégies divergentes face aux investisseurs", summary: "Les analystes comparent les trajectoires de rentabilité et de transition des majors.", publishedAt: "2026-02-07T01:55:00Z", source: "Yahoo Finance", feedTitle: "Yahoo Finance", country: "🇺🇸", link: "https://finance.yahoo.com/" },
+      { title: "Prix du brut: impact des décisions OPEC+ attendu", summary: "Les traders anticipent les prochaines annonces de quotas et leur effet sur les marges.", publishedAt: "2026-02-07T01:15:00Z", source: "CNBC", feedTitle: "CNBC Top News", country: "🇺🇸", link: "https://www.cnbc.com/" },
+      { title: "Politique énergétique US: cap sur la production domestique", summary: "Washington maintient une ligne favorable à la sécurité énergétique nationale.", publishedAt: "2026-02-07T00:50:00Z", source: "Reuters", feedTitle: "Reuters Business", country: "🌍", link: "https://www.reuters.com/" },
+      { title: "Liban offshore: consortiums et risques géopolitiques", summary: "Les analystes soulignent la complexité opérationnelle en Méditerranée orientale.", publishedAt: "2026-02-07T00:20:00Z", source: "World Oil", feedTitle: "World Oil", country: "🛢️", link: "https://www.worldoil.com/" },
+      { title: "Risque réputationnel: la bataille des narratifs continue", summary: "La perception publique reste un facteur majeur de valorisation dans l'énergie.", publishedAt: "2026-02-06T23:45:00Z", source: "Google News", feedTitle: "Google News - Energy", country: "🔍", link: "https://news.google.com/" },
+      { title: "Projet solaire industriel: nouveaux PPA annoncés", summary: "Les contrats de long terme soutiennent la visibilité financière des producteurs.", publishedAt: "2026-02-06T22:55:00Z", source: "The Guardian", feedTitle: "The Guardian Business", country: "🇬🇧", link: "https://www.theguardian.com/uk/business" },
+      { title: "Gaz naturel liquéfié: concurrence accrue Asie/Europe", summary: "Les arbitrages de cargaisons intensifient la compétition entre régions importatrices.", publishedAt: "2026-02-06T21:40:00Z", source: "Al Jazeera", feedTitle: "Google News - LNG", country: "🔍", link: "https://news.google.com/" },
+      { title: "TotalEnergies: focus investisseurs sur la discipline financière", summary: "Le marché surveille la génération de cash-flow et les retours actionnaires.", publishedAt: "2026-02-06T20:55:00Z", source: "MarketWatch", feedTitle: "MarketWatch", country: "🇺🇸", link: "https://www.marketwatch.com/" },
+      { title: "Campagnes climat: intensification des actions terrain", summary: "Des collectifs annoncent de nouvelles mobilisations au premier trimestre.", publishedAt: "2026-02-06T20:20:00Z", source: "Euronews", feedTitle: "Euronews", country: "🇪🇺", link: "https://www.euronews.com/" },
+      { title: "Raffinage: marges contrastées selon les régions", summary: "Les performances divergent entre Europe, Asie et Amérique du Nord.", publishedAt: "2026-02-06T19:35:00Z", source: "OilPrice", feedTitle: "OilPrice.com", country: "🛢️", link: "https://oilprice.com/" }
+    ];
+    const STANDALONE_SOURCES = [
+      { name: "Reuters Business", url: "https://feeds.reuters.com/reuters/businessNews", country: "🌍" },
+      { name: "BBC News Business", url: "http://feeds.bbci.co.uk/news/business/rss.xml", country: "🇬🇧" },
+      { name: "The Guardian Business", url: "https://www.theguardian.com/uk/business/rss", country: "🇬🇧" },
+      { name: "Al Jazeera", url: "https://www.aljazeera.com/xml/rss/all.xml", country: "🌍" },
+      { name: "Yahoo Finance", url: "https://finance.yahoo.com/news/rssindex", country: "🇺🇸" },
+      { name: "CNBC Top News", url: "https://www.cnbc.com/id/100003114/device/rss/rss.html", country: "🇺🇸" },
+      { name: "MarketWatch", url: "http://feeds.marketwatch.com/marketwatch/topstories/", country: "🇺🇸" },
+      { name: "Investing.com", url: "https://www.investing.com/rss/news.rss", country: "🌍" },
+      { name: "OilPrice.com", url: "https://oilprice.com/rss/main", country: "🛢️" },
+      { name: "Energy Voice", url: "https://www.energyvoice.com/feed/", country: "🛢️" },
+      { name: "World Oil", url: "https://www.worldoil.com/feed", country: "🛢️" },
+      { name: "Offshore Energy", url: "https://www.offshore-energy.biz/feed/", country: "🛢️" },
+      { name: "Rigzone", url: "http://www.rigzone.com/rss/news.aspx", country: "🛢️" },
+      { name: "Google News - TotalEnergies", url: "https://news.google.com/rss/search?q=TotalEnergies&hl=en&gl=US&ceid=US:en", country: "🔍" },
+      { name: "Google News - Energy", url: "https://news.google.com/rss/search?q=energy+oil+gas&hl=en&gl=US&ceid=US:en", country: "🔍" },
+      { name: "Google News - LNG", url: "https://news.google.com/rss/search?q=LNG+liquefied+natural+gas&hl=en&gl=US&ceid=US:en", country: "🔍" },
+      { name: "Google News - Renewable", url: "https://news.google.com/rss/search?q=renewable+energy+solar+wind&hl=en&gl=US&ceid=US:en", country: "🔍" },
+      { name: "Euronews", url: "https://www.euronews.com/rss?level=theme&name=news", country: "🇪🇺" },
+    ];
+
+    let newsData = [];
+    let sourcesUsed = [];
+    let stockData = null;
+    let isLoading = false;
+
+    function showSection(sectionId, evt) {
+      document.querySelectorAll('.section').forEach((s) => s.classList.add('hidden'));
+      document.getElementById('section-' + sectionId).classList.remove('hidden');
+      document.querySelectorAll('.nav-btn').forEach((btn) => {
+        btn.classList.remove('bg-red-600', 'text-white');
+        btn.classList.add('text-slate-400');
+      });
+      const trigger = evt?.currentTarget || evt?.target;
+      if (trigger) {
+        trigger.classList.add('bg-red-600', 'text-white');
+        trigger.classList.remove('text-slate-400');
+      }
+      window.scrollTo(0, 0);
+    }
+
+    function escapeHtml(value = '') {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function formatTime(dateStr) {
+      if (!dateStr) return '';
+      const date = new Date(dateStr);
+      if (Number.isNaN(date.getTime())) return '';
+      const now = new Date();
+      const diff = Math.floor((now - date) / 1000);
+      if (diff < 60) return "A l'instant";
+      if (diff < 3600) return `il y a ${Math.floor(diff / 60)}min`;
+      if (diff < 86400) return `il y a ${Math.floor(diff / 3600)}h`;
+      return date.toLocaleDateString('fr-FR');
+    }
+
+    function parseFeedXml(xmlText, sourceMeta) {
+      const doc = new DOMParser().parseFromString(xmlText, 'text/xml');
+      const parseItem = (node, atom = false) => {
+        const get = (sel) => node.querySelector(sel)?.textContent?.trim() || '';
+        const title = get('title');
+        const summary = get('description') || get('summary') || get('content');
+        const publishedAt = get('pubDate') || get('published') || get('updated');
+        let link = '';
+        if (atom) {
+          link = node.querySelector('link[rel="alternate"]')?.getAttribute('href')
+            || node.querySelector('link')?.getAttribute('href')
+            || '';
+        } else {
+          link = get('link');
+        }
+        return {
+          id: link || title,
+          title,
+          link,
+          summary: summary.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(),
+          publishedAt,
+          source: sourceMeta.name,
+          feedTitle: sourceMeta.name,
+          country: sourceMeta.country || '🌍',
+        };
+      };
+
+      const rssItems = Array.from(doc.querySelectorAll('rss channel item')).map((n) => parseItem(n, false));
+      if (rssItems.length) return rssItems;
+      return Array.from(doc.querySelectorAll('feed entry')).map((n) => parseItem(n, true));
+    }
+
+    async function loadStandaloneNews() {
+      return {
+        updatedAt: new Date().toISOString(),
+        sources: [...STANDALONE_SOURCES.map((s) => s.name), "Snapshot local"],
+        items: STANDALONE_FALLBACK_NEWS,
+      };
+    }
+
+    async function loadStandaloneStock() {
+      return {
+        symbol: 'TTE.PA',
+        price: '60.14',
+        changePercent: '-1.65',
+        currency: 'EUR',
+        fallback: true,
+        lastUpdate: new Date().toISOString(),
+      };
+    }
+
+    function updateStockWidget() {
+      if (!stockData) return;
+      const priceLine = document.getElementById('stock-price-line');
+      const symbol = document.getElementById('stock-symbol');
+      const update = document.getElementById('stock-update');
+      const change = Number(stockData.changePercent || 0);
+      const color = change >= 0 ? 'text-emerald-300' : 'text-red-300';
+      const sign = change >= 0 ? '+' : '';
+      symbol.textContent = stockData.symbol || 'TTE.PA';
+      priceLine.innerHTML = `${escapeHtml(stockData.price)}${stockData.currency === 'EUR' ? '€' : ''} <span class="text-sm ${color}">${sign}${escapeHtml(stockData.changePercent)}%</span>`;
+      update.textContent = `Mise a jour: ${formatTime(stockData.lastUpdate) || '--'}`;
+    }
+
+    function populateMentions(updatedAt) {
+      const container = document.getElementById('live-stream-container');
+      if (!container) return;
+      const latest = newsData.slice(0, 20);
+      const sourceBadges = sourcesUsed.slice(0, 12).map((name) =>
+        `<span class="text-[10px] px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">${escapeHtml(name)}</span>`
+      ).join('');
+
+      container.innerHTML = `
+        <div class="bg-slate-900 rounded-lg p-6 border border-slate-800">
+          <div class="flex items-center justify-between mb-3 gap-4 flex-wrap">
+            <h3 class="text-xl font-bold">📡 Live Stream</h3>
+            <div class="flex items-center gap-3 text-emerald-400 text-sm">
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                <span>${newsData.length} articles</span>
+              </div>
+              <span class="text-slate-500">•</span>
+              <span class="text-slate-400">MAJ ${formatTime(updatedAt)}</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 mb-3">Sources actives (${sourcesUsed.length})</p>
+          <div class="flex flex-wrap gap-2 mb-4">${sourceBadges}</div>
+          <div class="space-y-3 max-h-[600px] overflow-y-auto scrollbar-thin">
+            ${latest.map((item) => `
+              <div class="bg-slate-800 rounded-lg p-4 hover:bg-slate-700 transition-colors">
+                <div class="flex items-center gap-3 flex-wrap mb-2">
+                  <span class="text-xl">${escapeHtml(item.country || '🌍')}</span>
+                  <span class="font-bold text-slate-300 text-sm">${escapeHtml(item.feedTitle || item.source || 'Source')}</span>
+                  <span class="text-slate-500 text-xs">${escapeHtml(formatTime(item.publishedAt))}</span>
+                </div>
+                <h4 class="text-white text-sm font-medium mb-1">${escapeHtml(item.title || '')}</h4>
+                ${item.summary ? `<p class="text-slate-400 text-xs">${escapeHtml(item.summary.substring(0, 140))}...</p>` : ''}
+                ${item.link ? `<a href="${escapeHtml(item.link)}" target="_blank" rel="noopener noreferrer" class="text-red-400 hover:text-red-300 text-xs mt-1 inline-block">Lire →</a>` : ''}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function populateBrief() {
+      const container = document.getElementById('hot-topics-container');
+      if (!container) return;
+      const top5 = newsData.slice(0, 5);
+      container.innerHTML = `
+        <div class="bg-slate-900 rounded-lg p-6 border border-slate-800">
+          <h3 class="text-xl font-bold mb-4">🔥 5 Sujets Chauds (auto)</h3>
+          <div class="space-y-4">
+            ${top5.map((item, i) => `
+              <div class="border-l-4 ${i === 0 ? 'border-red-500' : i < 2 ? 'border-orange-500' : 'border-emerald-500'} pl-4">
+                <div class="flex items-center gap-2 mb-1 flex-wrap">
+                  <h4 class="font-bold text-white">${i + 1}. ${escapeHtml(item.title || '')}</h4>
+                  <span class="px-2 py-0.5 text-xs rounded ${i === 0 ? 'bg-red-500/20 text-red-400' : i < 2 ? 'bg-orange-500/20 text-orange-400' : 'bg-emerald-500/20 text-emerald-400'}">
+                    ${i === 0 ? '🔴 CRITIQUE' : i < 2 ? '🟠 SURVEILLER' : '🟢 INFO'}
+                  </span>
+                </div>
+                <p class="text-slate-400 text-sm mb-1">${item.summary ? `${escapeHtml(item.summary.substring(0, 150))}...` : 'Actualite du secteur energie'}</p>
+                <p class="text-slate-500 text-xs">Source: ${escapeHtml(item.feedTitle || item.source || 'Source')} • ${escapeHtml(formatTime(item.publishedAt))}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadData() {
+      if (isLoading) return;
+      isLoading = true;
+      try {
+        let newsPayload;
+        let stockPayload;
+        if (STANDALONE_MODE) {
+          [newsPayload, stockPayload] = await Promise.all([loadStandaloneNews(), loadStandaloneStock()]);
+        } else {
+          const [newsRes, stockRes] = await Promise.all([
+            fetch('/api/news', { cache: 'no-store' }),
+            fetch('/api/stock', { cache: 'no-store' }),
+          ]);
+          if (!newsRes.ok) throw new Error(`News API ${newsRes.status}`);
+          if (!stockRes.ok) throw new Error(`Stock API ${stockRes.status}`);
+          newsPayload = await newsRes.json();
+          stockPayload = await stockRes.json();
+        }
+
+        newsData = Array.isArray(newsPayload.items) ? newsPayload.items : [];
+        sourcesUsed = Array.isArray(newsPayload.sources) ? newsPayload.sources : [];
+        stockData = stockPayload || null;
+
+        updateStockWidget();
+        populateMentions(newsPayload.updatedAt || new Date().toISOString());
+        populateBrief();
+      } catch (error) {
+        console.error('Load error:', error);
+      } finally {
+        isLoading = false;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const firstNav = document.querySelector('.nav-btn');
+      if (firstNav) firstNav.classList.add('bg-red-600', 'text-white');
+      const modeBadge = document.getElementById('mode-badge');
+      if (modeBadge) {
+        modeBadge.textContent = STANDALONE_MODE ? 'MODE LOCAL (SANS NODE) - SNAPSHOT AUTO SI BLOQUE' : 'MODE API NETLIFY';
+        modeBadge.classList.remove('hidden');
+      }
+      loadData();
+      setInterval(loadData, REFRESH_MS);
+    });
+  </script>
+
+</body>
+</html>
